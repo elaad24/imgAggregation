@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ES6", // Specify ECMAScript target version
+    "module": "CommonJS", // Specify module code generation (for Node.js)
+    "outDir": "./dist", // Redirect output structure to the "dist" folder
+    "rootDir": "./" // Specify the root directory of input files
+  },
+  "include": ["/**/*"] // Include all TypeScript files in the "src" directory
+}
