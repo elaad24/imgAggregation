@@ -1,0 +1,51 @@
+{
+  "documents": {
+    "description": "Formal or official papers with structured information or communication.",
+    "common_words": [
+      "agreement",
+      "contract",
+      "policy",
+      "report",
+      "invoice",
+      "statement",
+      "letter",
+      "application",
+      "summary",
+      "meeting",
+      "analysis"
+    ]
+  },
+  "recipes": {
+    "description": "Instructions and ingredients for preparing food or drinks.",
+    "common_words": [
+      "ingredients",
+      "preheat",
+      "bake",
+      "cook",
+      "mix",
+      "stir",
+      "chop",
+      "servings",
+      "dish",
+      "boil",
+      "season",
+      "garnish"
+    ]
+  },
+  "resumes": {
+    "description": "A document summarizing a person's skills, education, and work experience.",
+    "common_words": [
+      "experience",
+      "skills",
+      "education",
+      "position",
+      "responsibilities",
+      "achievements",
+      "projects",
+      "certifications",
+      "languages",
+      "degree",
+      "references"
+    ]
+  }
+}
