@@ -94,7 +94,8 @@ def send_data_to_gpt(file_name):
                 in the common_words add pick just couple (less then 10) words from the file that in the essence of the file.
                 and if you think that the file doesn't fit in any of the folders,
                 you can decide to open new folder and pick it name, and create its description, and common_words.
-                
+                 but the goal is not to open new directory for every file, is to make some generic directory name so multiple files can be assigned to it 
+
                 output:          
                 you need to return the data as following,
                   {
