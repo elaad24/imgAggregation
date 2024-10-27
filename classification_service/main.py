@@ -12,6 +12,7 @@ client = OpenAI(api_key=os.getenv("CHAT_GPT_SECRET"))
 
 
 class Output_Info(BaseModel):
+    filename: str
     isNewDir: bool
     toDir: str
     description: str
@@ -48,6 +49,7 @@ def send_data_to_gpt(file_name):
             "directories": directories_object_array,
             "directories_info": dir_info_file,
         },
+        "filename": file_name,
         "file_text": ocr_file_text,
     }
 
@@ -74,6 +76,7 @@ def send_data_to_gpt(file_name):
                         }
                         }
                     },
+                    "filename":string,
                     "file_text": "string"
                     }
 
@@ -95,6 +98,7 @@ def send_data_to_gpt(file_name):
                 output:          
                 you need to return the data as following,
                   {
+                    filename:string, // the file name.
                     isNewDir:boolean, // if you decide that need to open new directory for the file.
                     toDir:string,  // the name of the directory that the file needs to be stored in.
                     description:string,  // the description of the directory that you got in the request, or the updated one in case you decide to change it.
