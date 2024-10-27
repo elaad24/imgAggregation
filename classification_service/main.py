@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from pydantic import BaseModel
 
+from redis_helper import consume_from_queue, push_to_queue
+
 load_dotenv()
 client = OpenAI(api_key=os.getenv("CHAT_GPT_SECRET"))
 
@@ -121,6 +123,7 @@ def send_data_to_gpt(file_name):
     )
     print("-------------------------")
     print(completion.choices[0].message.parsed)
+    push_to_queue("organizer_queue", json.dumps(completion.choices[0].message.parsed))
     return completion.choices[0].message.parsed
 
 
@@ -135,4 +138,14 @@ def get_directories(path):
     return directories
 
 
-send_data_to_gpt("Screenshot 2024-10-25 at 2.25.42.png")
+# handle the listening for message and trigger them
+def listen_to_queue(queue_name):
+    print(f"Listening to {queue_name} queue...")
+    while True:
+        message = consume_from_queue(queue_name)
+        if message:
+            for fileName in message:
+                send_data_to_gpt(fileName)
+
+
+listen_to_queue("classification_queue")

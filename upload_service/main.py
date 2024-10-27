@@ -1,8 +1,11 @@
+import json
 import os
 import shutil
 from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
+
+from redis_helper import push_to_queue
 
 app = FastAPI()
 
@@ -43,5 +46,6 @@ async def upload_file(files: list[UploadFile] = File(...)):
             raise HTTPException(
                 status_code=500, detail=f"Error saving file {file.filename} : {str(e)}"
             )
-
+    file_name_arr = [i["filename"] for i in saved_file_info]
+    push_to_queue("ocr_queue", file_name_arr)
     return saved_file_info

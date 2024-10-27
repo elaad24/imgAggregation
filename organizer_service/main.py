@@ -5,6 +5,8 @@ from typing import List
 
 from pydantic import BaseModel
 
+from redis_helper import consume_from_queue
+
 
 class Output_Info(BaseModel):
     filename: str
@@ -77,23 +79,35 @@ def cleanup(filename, preSortPath):
         os.remove(ocrFilePath)
 
 
-a = {
-    "filename": "Screenshot 2024-10-25 at 2.25.42.png",
-    "isNewDir": False,
-    "toDir": "exploration",
-    "description": "A collection of files related to software exploration, including tests and service images.",
-    "common_words": [
-        "explorer",
-        "classify",
-        "tests",
-        "images",
-        "upload",
-        "service",
-        "docker",
-        "cache",
-        "venv",
-        "repository",
-    ],
-}
+# a = {
+#     "filename": "Screenshot 2024-10-25 at 2.25.42.png",
+#     "isNewDir": False,
+#     "toDir": "exploration",
+#     "description": "A collection of files related to software exploration, including tests and service images.",
+#     "common_words": [
+#         "explorer",
+#         "classify",
+#         "tests",
+#         "images",
+#         "upload",
+#         "service",
+#         "docker",
+#         "cache",
+#         "venv",
+#         "repository",
+#     ],
+# }
 
-organize_function(a)
+# organize_function(a)
+
+
+# handle the listening for message and trigger them
+def listen_to_queue(queue_name):
+    print(f"Listening to {queue_name} queue...")
+    while True:
+        message = consume_from_queue(queue_name)
+        if message:
+            organize_function(json.loads(message))
+
+
+listen_to_queue("organizer_queue")
