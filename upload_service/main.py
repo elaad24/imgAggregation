@@ -32,7 +32,7 @@ async def upload_file(files: list[UploadFile] = File(...)):
                 status_code=400,
                 detail=f"File format not supported for file {file.filename}",
             )
-        file_path = os.path.join(UPLOAD_DIR, file.filename)
+        file_path = Path(os.path.join(UPLOAD_DIR, file.filename))
 
         try:
             with open(file_path, "wb") as buffer:
