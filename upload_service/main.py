@@ -4,7 +4,6 @@ import shutil
 from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
-
 from redis_helper import push_to_queue
 
 app = FastAPI()
@@ -15,7 +14,12 @@ def root():
     return {"all good": "still running"}
 
 
-UPLOAD_DIR = Path("../imagesFolder/preSort")
+# Path to the volume directory
+basePathForImagesFolder = "/app/imagesFolder"
+
+
+# UPLOAD_DIR = Path("../imagesFolder/preSort")
+UPLOAD_DIR = os.path.join(Path(basePathForImagesFolder), "preSort")
 
 
 @app.post("/uploadImg")
@@ -28,7 +32,7 @@ async def upload_file(files: list[UploadFile] = File(...)):
                 status_code=400,
                 detail=f"File format not supported for file {file.filename}",
             )
-        file_path = UPLOAD_DIR / file.filename
+        file_path = os.path.join(UPLOAD_DIR, file.filename)
 
         try:
             with open(file_path, "wb") as buffer:

@@ -4,7 +4,6 @@ import shutil
 from typing import List
 
 from pydantic import BaseModel
-
 from redis_helper import consume_from_queue
 
 
@@ -16,17 +15,33 @@ class Output_Info(BaseModel):
     common_words: List[str]
 
 
+# Path to the volume directory
+basePathForImagesFolder = "/app/imagesFolder"
+base_path_for_output_textFiles = "/app/text_files"
+
+
 def organize_function(gptReturnObj: Output_Info):
-    preSortPath = os.path.join(
-        os.path.dirname(__file__), "..", "imagesFolder", "preSort"
-    )
-    sortedPath = os.path.join(os.path.dirname(__file__), "..", "imagesFolder", "sorted")
+    #  for local usage
+    # preSortPath = os.path.join(
+    #     os.path.dirname(__file__), "..", "imagesFolder", "preSort"
+    # )
+    preSortPath = os.path.join(basePathForImagesFolder, "preSort")
+    #  for local usage
+    # sortedPath = os.path.join(os.path.dirname(__file__), "..", "imagesFolder", "sorted")
+    sortedPath = os.path.join(basePathForImagesFolder, "sorted")
+
     if gptReturnObj["isNewDir"]:
         createDir(gptReturnObj["toDir"], sortedPath)
+    # for local usage
+    # dirPath = os.path.join(
+    #     os.path.dirname(__file__), "..", "imagesFolder", "sorted", gptReturnObj["toDir"]
+    # )
 
-    dirPath = os.path.join(
-        os.path.dirname(__file__), "..", "imagesFolder", "sorted", gptReturnObj["toDir"]
-    )
+    # for local usage
+    # dirPath = os.path.join(
+    #     os.path. dirname(__file__), "..", "imagesFolder", "sorted", gptReturnObj["toDir"]
+    # )
+    dirPath = os.path.join(basePathForImagesFolder, "sorted", gptReturnObj["toDir"])
 
     setInFolder(gptReturnObj["filename"], preSortPath, dirPath)
 
@@ -66,39 +81,22 @@ def updateFolderData(sortedPath, dirname, description, common_words):
 
 def cleanup(filename, preSortPath):
     preSortedImgPath = os.path.join(preSortPath, filename)
+    # for local usage
+    # ocrFilePath = os.path.join(
+    #     os.path.dirname(__file__),
+    #     "..",
+    #     "classification_service",
+    #     "text_files",
+    #     f"{filename}.txt",
+
     ocrFilePath = os.path.join(
-        os.path.dirname(__file__),
-        "..",
-        "classification_service",
-        "text_files",
+        base_path_for_output_textFiles,
         f"{filename}.txt",
     )
     if os.path.exists(preSortedImgPath):
         os.remove(preSortedImgPath)
     if os.path.exists(ocrFilePath):
         os.remove(ocrFilePath)
-
-
-# a = {
-#     "filename": "Screenshot 2024-10-25 at 2.25.42.png",
-#     "isNewDir": False,
-#     "toDir": "exploration",
-#     "description": "A collection of files related to software exploration, including tests and service images.",
-#     "common_words": [
-#         "explorer",
-#         "classify",
-#         "tests",
-#         "images",
-#         "upload",
-#         "service",
-#         "docker",
-#         "cache",
-#         "venv",
-#         "repository",
-#     ],
-# }
-
-# organize_function(a)
 
 
 # handle the listening for message and trigger them

@@ -6,11 +6,14 @@ from typing import List
 from dotenv import load_dotenv
 from openai import OpenAI
 from pydantic import BaseModel
-
 from redis_helper import consume_from_queue, push_to_queue
 
 load_dotenv()
-client = OpenAI(api_key=os.getenv("CHAT_GPT_SECRET"))
+client = OpenAI(api_key=os.getenv("API_KEY"))
+
+# Path to the volume directory
+basePathForImagesFolder = "/app/imagesFolder"
+base_path_for_output_textFiles = "/app/text_files"
 
 
 class Output_Info(BaseModel):
@@ -22,24 +25,35 @@ class Output_Info(BaseModel):
 
 
 def send_data_to_gpt(file_name):
-    dirs_path = Path(
-        os.path.join(os.path.dirname(__file__), "..", "imagesFolder", "sorted")
-    )
+    # use in local
+    # dirs_path = Path(
+    #     os.path.join(os.path.dirname(__file__), "..", "imagesFolder", "sorted")
+    # )
+
+    dirs_path = Path(os.path.join(basePathForImagesFolder, "sorted"))
 
     directories_object_array = get_directories(dirs_path)
 
-    dir_info_file_path = os.path.join(
-        os.path.dirname(__file__), "..", "imagesFolder", "sorted", "info.json"
-    )
+    # use in local
+    # dir_info_file_path = os.path.join(
+    #     os.path.dirname(__file__), "..", "imagesFolder", "sorted", "info.json"
+    # )
+
+    dir_info_file_path = os.path.join(basePathForImagesFolder, "sorted", "info.json")
 
     with open(dir_info_file_path, "r") as info_file:
         dir_info_file = info_file.read()
+    # for local usage
+    # ocr_file_path = os.path.join(
+    #     os.path.dirname(__file__),
+    #     "..",
+    #     "classification_service",
+    #     "text_files",
+    #     f"{file_name}.txt",
+    # )
 
     ocr_file_path = os.path.join(
-        os.path.dirname(__file__),
-        "..",
-        "classification_service",
-        "text_files",
+        base_path_for_output_textFiles,
         f"{file_name}.txt",
     )
 
