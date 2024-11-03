@@ -1,8 +1,71 @@
-version: "3.8"
-
 services:
   redis:
     image: redis:latest
     container_name: redis-container
     ports:
-      - "6379:6379"
+      - "6379:6379" # Exposes Redis on port 6379 for external access (optional)
+    networks:
+      - app-network
+
+  upload_service:
+    volumes:
+      - shared_images:/app/imagesFolder
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    networks:
+      - app-network
+    # entrypoint: ["/app/entrypoint.sh"]
+    build: ./upload_service
+
+  ocr_service:
+    build: ./ocr_service # Path to the Dockerfile in ocr-service folder
+    volumes:
+      - shared_images:/app/imagesFolder
+      - output_text_files:/app/text_files
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    networks:
+      - app-network
+
+  classification_service:
+    build: ./classification_service # Path to the Dockerfile in classification-service folder
+    volumes:
+      - shared_images:/app/imagesFolder
+      - output_text_files:/app/text_files
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - API_KEY=${CHAT_GPT_SECRET}
+    networks:
+      - app-network
+
+  organizer_service:
+    build: ./organizer_service # Path to the Dockerfile in organizer-service folder
+    volumes:
+      - shared_images:/app/imagesFolder
+      - output_text_files:/app/text_files
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  shared_images:
+  output_text_files:
