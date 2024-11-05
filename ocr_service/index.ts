@@ -27,8 +27,8 @@ const convert_img_to_txt = async (fileNameArr: string[]) => {
             logger: (e) => console.log(e.status, e.progress),
           });
           console.log(result.data.text);
-          saveTextToFile(result.data.text, outputPath);
-          pushToQueue("classification_queue", file);
+          await saveTextToFile(result.data.text, outputPath);
+          await pushToQueue("classification_queue", file);
         }
       });
     });
