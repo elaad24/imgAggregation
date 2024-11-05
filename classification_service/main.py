@@ -124,7 +124,8 @@ def send_data_to_gpt(file_name):
     )
     print("-------------------------")
     print(completion.choices[0].message.parsed)
-    push_to_queue("organizer_queue", json.dumps(completion.choices[0].message.parsed))
+    answer_response = completion.choices[0].message.parsed
+    push_to_queue("organizer_queue", json.dumps(answer_response.model_dump()))
     return completion.choices[0].message.parsed
 
 

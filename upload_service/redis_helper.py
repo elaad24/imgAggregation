@@ -45,9 +45,3 @@ def consume_from_queue(queue_name):
 #     toDir: str
 #     description: str
 #     common_words: List[str]
-
-
-# todo: left to do -
-# test it that it works
-# build the docker compose
-# ! make sure that the gpt does return the obejct with = , it need to return valud json format

@@ -105,6 +105,7 @@ def listen_to_queue(queue_name):
     while True:
         message = consume_from_queue(queue_name)
         if message:
+            print("new message is here ", message)
             organize_function(json.loads(message))
 
 

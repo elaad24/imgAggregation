@@ -33,6 +33,8 @@ fi
 if [ ! -d "$JSON_FILE" ]; then
 echo "creating $JSON_FILE file"
 
+echo "it did run "
+
 echo '{
  "documents": {
   "description": "Formal or official papers with structured information or communication.",
