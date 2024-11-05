@@ -19,11 +19,10 @@ services:
       - REDIS_PORT=6379
     networks:
       - app-network
-    # entrypoint: ["/app/entrypoint.sh"]
     build: ./upload_service
 
   ocr_service:
-    build: ./ocr_service # Path to the Dockerfile in ocr-service folder
+    build: ./ocr_service
     volumes:
       - shared_images:/app/imagesFolder
       - output_text_files:/app/text_files
@@ -36,7 +35,7 @@ services:
       - app-network
 
   classification_service:
-    build: ./classification_service # Path to the Dockerfile in classification-service folder
+    build: ./classification_service
     volumes:
       - shared_images:/app/imagesFolder
       - output_text_files:/app/text_files

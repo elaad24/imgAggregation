@@ -12,4 +12,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Step 5: Specify the command to start the application
-CMD ["python", "main.py"]
+CMD ["python3", "main.py"]

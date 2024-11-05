@@ -16,6 +16,8 @@ COPY ./entry_scripts/imagesFolder.sh /app/entrypoint.sh
 
 # Step 6: Ensure the entrypoint script is executable
 RUN chmod +x /app/entrypoint.sh
+ENTRYPOINT [ "/app/entrypoint.sh" ]
+
 
 # Step 7: Expose the port your FastAPI app will run on (e.g., 8000)
 EXPOSE 8000

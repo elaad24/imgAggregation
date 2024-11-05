@@ -5,11 +5,11 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Step 3: Copy the requirements file and install dependencies
-COPY requirements.txt .
+COPY ./requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Step 4: Copy the entire microservice code into the container
 COPY . .
 
 # Step 5: Specify the command to start the application
-CMD ["python", "main.py"]
+CMD ["python","-u", "main.py"]
